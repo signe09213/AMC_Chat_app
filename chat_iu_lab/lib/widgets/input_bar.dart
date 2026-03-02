@@ -2,68 +2,44 @@ import 'package:flutter/material.dart';
 
 class InputBar extends StatefulWidget {
   final Function(String) onSendMessage;
-  final bool enabled;
 
-  const InputBar({
-    Key? key,
-    required this.onSendMessage,
-    this.enabled = true,
-  }) : super(key: key);
+  const InputBar({super.key, required this.onSendMessage});
 
   @override
-  _InputBarState createState() => _InputBarState();
+  State<InputBar> createState() => _InputBarState();
 }
 
 class _InputBarState extends State<InputBar> {
-  final _textController = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
-  void _handleSend() {
-    if (_textController.text.isNotEmpty) {
-      widget.onSendMessage(_textController.text);
-      _textController.clear();
+  void _sendMessage() {
+    if (_controller.text.isNotEmpty) {
+      widget.onSendMessage(_controller.text);
+      _controller.clear();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              controller: _textController,
-              decoration: InputDecoration(
-                hintText: 'Type your message here',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              controller: _controller,
+              decoration: const InputDecoration(
+                hintText: 'Type a message...',
               ),
-              enabled: widget.enabled,
-              onSubmitted: widget.enabled ? (_) => _handleSend() : null,
+              onSubmitted: (_) => _sendMessage(),
             ),
           ),
-          const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.send),
-            onPressed: widget.enabled ? _handleSend : null,
-            style: IconButton.styleFrom(
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-            ),
+            onPressed: _sendMessage,
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
   }
 }

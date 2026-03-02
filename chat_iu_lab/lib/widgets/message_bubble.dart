@@ -4,30 +4,20 @@ import '../models/chat_message.dart';
 class MessageBubble extends StatelessWidget {
   final ChatMessage message;
 
-  const MessageBubble({Key? key, required this.message}) : super(key: key);
+  const MessageBubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: message.isUserMessage
-          ? Alignment.centerRight
-          : Alignment.centerLeft,
+      alignment: message.role == 'user' ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: message.isUserMessage
-              ? Colors.purple[100]
-              : Colors.blue[100],
-          borderRadius: BorderRadius.circular(18),
+          color: message.role == 'user' ? Colors.blue[100] : Colors.grey[200],
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Text(
-          message.text,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black87,
-          ),
-        ),
+        child: Text(message.text),
       ),
     );
   }
